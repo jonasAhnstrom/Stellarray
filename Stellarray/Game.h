@@ -7,7 +7,7 @@
 #include "Course.h"
 
 
-class Game : public QMainWindow
+class Game : public QWidget
 {
 	friend class Stellarray;
 

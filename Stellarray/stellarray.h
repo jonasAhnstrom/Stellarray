@@ -3,6 +3,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_stellarray.h"
 
+#include "Game.h"
 
 class Stellarray : public QMainWindow
 {
@@ -14,6 +15,7 @@ public:
 
 private:
 	Ui::StellarrayClass _ui;
+	Game *_game;
 
 private slots:
 	void startNewGame();
