@@ -18,7 +18,7 @@ public:
 
 private:
 	Ui::StellarrayClass _ui;
-	Game *_game;
+	Game _game;
 
 private slots:
 	void startNewGame();

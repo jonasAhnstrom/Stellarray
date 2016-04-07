@@ -12,14 +12,14 @@
 #include <qdebug.h>
 
 
-Player::Player(QGraphicsItem *parent) : _velocity(0), _rotationSpeed(2), _velocityComponent()/*, _playerPixmap("Resources/player.png")*/
+Player::Player(QGraphicsItem *parent) : _velocity(0), _rotationSpeed(0), _velocityComponent()/*, _playerPixmap("Resources/player.png")*/
 {
 	QPixmap pix = QPixmap("Resources/player.png");
 	pix.setDevicePixelRatio(5); // TODO: change size in photoshop for better quality scaling
 	setPixmap(pix);
 	//_playerPixmap.setDevicePixelRatio(qreal(5)); // TODO: change size in photoshop for better quality scaling
 	setPos(2000, 1500);
-	setRotation(5);
+	setTransformOriginPoint(boundingRect().width() / 2, boundingRect().height() / 2);
 }
 
 
@@ -112,32 +112,39 @@ void Player::update(QKeyEvent *event)
 
 void Player::updateVelocity()
 {
-	qreal currentRotation = rotation() < 90 ? rotation() - 90 : rotation(); // If first quadrant, special case -90
-	qDebug() << currentRotation;
+	qreal currentRotation = rotation()/* < 90 ? rotation() - 90 : rotation()*/; // If first quadrant, special case -90
 	qreal theta = (abs(fmod(currentRotation, 360)) / -1 + 90) * M_PI / 180; // Max 360 degrees rotation, absolute value, anti clockwise (-1), +90 to start from horizontal x-axle, degrees to radians
 
-	qDebug() << theta;
+	qreal cosTheta;
+	qreal sinTheta;
+	if (currentRotation < 0) // To deal with negative values from rotation()
+	{
+		theta /= -1;
+		cosTheta = cos(theta) / -1;
+		sinTheta = sin(theta) / -1;
+	}
+	else
+	{
+		cosTheta = cos(theta);
+		sinTheta = sin(theta);
+	}
 
-	qreal cosTheta = cos(theta);
-	qreal sinTheta = sin(theta);
-
-	// TODO: Fix zero rotation edge case, temp fix in constructor
 	qreal eX = cosTheta >= 0 ? 1 : -1;
 	qreal eY = sinTheta >= 0 ? 1 : -1;
 
-	if (_velocity < 25 && _keysDown.key_W && !_keysDown.key_S) // Check if max speed
+	if (_velocity < 5 && _keysDown.key_W && !_keysDown.key_S) // Check if max speed
 	{
-		_velocityComponent.x += pow(0.2, 2) * eX * abs(cosTheta);
-		_velocityComponent.y += pow(0.2, 2) * eY * abs(sinTheta);
+		_velocityComponent.x += (pow(0.08, 2) + 0.03) * eX * abs(cosTheta);
+		_velocityComponent.y += (pow(0.08, 2) + 0.03) * eY * abs(sinTheta);
 		/*qDebug() << "x = ";
 		qDebug() << _velocityComponent.x;
 		qDebug() << "y = ";
 		qDebug() << _velocityComponent.y;*/
 	}
-	else if (_keysDown.key_S && !_keysDown.key_W)
+	else if (_velocity < 3 && _keysDown.key_S && !_keysDown.key_W)
 	{
-		_velocityComponent.x -= pow(0.12, 2) * eX;
-		_velocityComponent.y -= pow(0.12, 2) * eY;
+		_velocityComponent.x -= (pow(0.04, 2) + 0.01) * eX * abs(cosTheta);;
+		_velocityComponent.y -= (pow(0.04, 2) + 0.01) * eY * abs(sinTheta);
 	}
 	else
 	{
@@ -162,13 +169,17 @@ void Player::updateRotation()
 {
 	if (_keysDown.key_A && !_keysDown.key_D)
 	{
-		_rotationSpeed -= pow(2, 2);
+		_rotationSpeed -= pow(0.13, 2);
 	}
 	else if (_keysDown.key_D && !_keysDown.key_A)
 	{
-		_rotationSpeed += pow(2, 2);
+		_rotationSpeed += pow(0.13, 2);
 	}
-	setRotation(_rotationSpeed);
+	else
+	{
+		_rotationSpeed > 0 ? _rotationSpeed /= 1.013 : _rotationSpeed /= 1.013;
+	}
+	setRotation(rotation() + _rotationSpeed);
 }
 
 // TODO: Velocity vector that knows x and y speed
@@ -178,35 +189,6 @@ void Player::advance(int step)
 	{
 		return;
 	}
-
 	updateVelocity();
 	updateRotation();
-
-	//if (_keysDown.noKey)
-	//{
-	//	updateVelocity();
-	//	updateRotation();
-	//}
-	//if (_keysDown.key_W)
-	//{
-	//		//_speed = _speed + pow(0.2, 2);
-	//		//_velocityComponent.x = _velocityComponent.x + pow(0.2, 2);
-	//		//_velocityComponent.y = _velocityComponent.y + pow(0.2, 2);
-	//	updateVelocity();
-	//}
-	//if (_keysDown.key_A)
-	//{
-	//	_rotationSpeed += _rotationSpeed - pow(0.2, 2);
-	//	setRotation(_rotationSpeed);
-	//}
-	//if (_keysDown.key_S)
-	//{
-	//	updateVelocity();
-	//}
-	//if (_keysDown.key_D)
-	//{
-	//	_rotationSpeed += _rotationSpeed + pow(0.2, 2);
-	//	setRotation(_rotationSpeed);
-	//}
-	//moveBy(0, -1 * _velocity);
 }

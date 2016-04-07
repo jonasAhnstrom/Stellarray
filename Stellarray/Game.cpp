@@ -5,9 +5,9 @@
 
 Game::Game()
 {
-	_gameScene.setSceneRect(QRectF(0, 0, 4000, 3000));
+	_gameScene.setSceneRect(QRectF(0, 0, 4000, 2980));
 	_gameScene.setItemIndexMethod(QGraphicsScene::NoIndex);
-	_gameScene.setBackgroundBrush(QBrush(QColor(120, 120, 180, 200), Qt::BrushStyle::CrossPattern));
+	_gameScene.setBackgroundBrush(QBrush(QPixmap("Resources/bg.png")));
 
 	_gameCourse.createCourse(/*courseNumber*/ 1, &_gameScene);
 
@@ -16,7 +16,7 @@ Game::Game()
 	_gameView.setScene(&_gameScene);
 	_gameView.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 	_gameView.setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-	_gameView.setFixedSize(1200, 700);
+	_gameView.setFixedSize(1400, 900);
 
 	QTimer *timer = new QTimer;
 	connect(timer, SIGNAL(timeout()), &_gameScene, SLOT(advance()));

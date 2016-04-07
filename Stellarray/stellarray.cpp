@@ -17,24 +17,23 @@ Stellarray::~Stellarray()
 
 void Stellarray::keyPressEvent(QKeyEvent *event)
 {
-	_game->keyPress(event);
+	_game.keyPress(event);
 }
 
 
 void Stellarray::keyReleaseEvent(QKeyEvent *event)
 {
-	_game->keyRelease(event);
+	_game.keyRelease(event);
 }
 
 // TODO: Launch in same window
 void Stellarray::startNewGame()
 {
-	_game = new Game();
-	_game->_gameView.setParent(this); // TODO: Gives assertion fail on app close
-	_game->_gameView.show();
+	//_game = new Game();
+	setCentralWidget(&_game);
+	_game._gameView.setParent(this); // TODO: Gives assertion fail on app close
+	_game._gameView.show();
 
-	this->setFixedSize(_game->_gameView.size());
-
-	//this->hide();
+	setFixedSize(_game._gameView.size());
 }
 
