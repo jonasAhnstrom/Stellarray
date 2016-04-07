@@ -7,7 +7,8 @@
 #include "Course.h"
 #include "Player.h"
 
-class Game : public QWidget
+
+class Game : public QGraphicsView
 {
 	Q_OBJECT
 
@@ -17,7 +18,8 @@ public:
 	Game();
 	~Game();
 
-	void keyPressEvent(QKeyEvent *event);
+	void keyPress(QKeyEvent *event);
+	void keyRelease(QKeyEvent *event);
 
 private:
 	QGraphicsScene _gameScene;

@@ -1,23 +1,26 @@
 #include "Game.h"
 
+#include <QtOpenGL\qgl.h>
+
 
 Game::Game()
 {
 	_gameScene.setSceneRect(QRectF(0, 0, 4000, 3000));
 	_gameScene.setItemIndexMethod(QGraphicsScene::NoIndex);
+	_gameScene.setBackgroundBrush(QBrush(QColor(120, 120, 180, 200), Qt::BrushStyle::CrossPattern));
 
 	_gameCourse.createCourse(/*courseNumber*/ 1, &_gameScene);
 
 	_gameScene.addItem(&_player);
 
 	_gameView.setScene(&_gameScene);
-	_gameView.setRenderHint(QPainter::Antialiasing);
-	_gameView.setCacheMode(QGraphicsView::CacheBackground);
+	_gameView.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 	_gameView.setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-	_gameView.setFixedSize(1200, 800);
+	_gameView.setFixedSize(1200, 700);
 
 	QTimer *timer = new QTimer;
 	connect(timer, SIGNAL(timeout()), &_gameScene, SLOT(advance()));
+	connect(timer, SIGNAL(timeout()), this, SLOT(update()));
 	timer->start((int)(1000 / 16,5));
 }
 
@@ -29,25 +32,19 @@ Game::~Game()
 
 void Game::update()
 {
-	_gameView.centerOn(_player.x() + _gameView.rect().width() / 5, _player.y());
+	_gameView.centerOn(_player.x() + _player.boundingRect().width() / 2, _player.y() + _player.boundingRect().height() / 2);
 }
 
-
-void Game::keyPressEvent(QKeyEvent *event)
+// Called from stellarray
+void Game::keyPress(QKeyEvent *event)
 {
 	_player.update(event);
-	update();
+	//update();
 }
 
-
-//void Game::keyReleaseEvent(QKeyEvent *event){
-//	switch (event->key()){
-//	case Qt::Key::Key_Space:
-//		_keysDown.jumpKey = false;
-//
-//		break;
-//	default:
-//
-//		break;
-//	}
-//}
+// Called from stellarray
+void Game::keyRelease(QKeyEvent *event)
+{
+	_player.update(event);
+	//update();
+}

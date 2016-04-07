@@ -5,6 +5,7 @@
 
 #include "Game.h"
 
+
 class Stellarray : public QMainWindow
 {
 	Q_OBJECT
@@ -12,6 +13,8 @@ class Stellarray : public QMainWindow
 public:
 	Stellarray(QWidget *parent = 0);
 	~Stellarray();
+	void keyPressEvent(QKeyEvent *event);
+	void keyReleaseEvent(QKeyEvent *event);
 
 private:
 	Ui::StellarrayClass _ui;
