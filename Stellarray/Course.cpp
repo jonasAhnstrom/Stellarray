@@ -23,4 +23,15 @@ void Course::createCourse(int courseNumber, QGraphicsScene *gameScene)
 	testRect2->setRect(2000, 1500, 120, 60);
 	gameScene->addItem(testRect2);
 
+	QGraphicsRectItem *testRect3 = new QGraphicsRectItem();
+	testRect3->setRect(1800, 1200, 130, 170);
+	gameScene->addItem(testRect3); 
+	
+	QGraphicsRectItem *testRect4 = new QGraphicsRectItem();
+	testRect4->setRect(2400, 800, 400, 240);
+	gameScene->addItem(testRect4); 
+	
+	QGraphicsRectItem *testRect5 = new QGraphicsRectItem();
+	testRect5->setRect(2400, 800, 400, 240);
+	gameScene->addItem(testRect5);
 }
