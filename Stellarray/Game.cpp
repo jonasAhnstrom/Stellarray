@@ -7,8 +7,8 @@ Game::Game(QWidget *parent)
 {
 	_gameScene.setSceneRect(QRectF(0, 0, 4000, 2980));
 	_gameScene.setItemIndexMethod(QGraphicsScene::NoIndex);
-	_gameScene.setBackgroundBrush(QBrush(QPixmap("Resources/bg.png")));
-
+	_gameScene.setBackgroundBrush(QBrush(QPixmap("Resources/bg3.png")));
+	
 	_gameCourse.createCourse(/*courseNumber*/ 1, &_gameScene);
 
 	_gameScene.addItem(&_player);

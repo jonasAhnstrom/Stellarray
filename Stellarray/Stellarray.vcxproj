@@ -189,6 +189,8 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\bg.png" />
+    <Image Include="Resources\bg2.png" />
+    <Image Include="Resources\bg3.png" />
     <Image Include="Resources\bullet.png" />
     <Image Include="Resources\player.png" />
   </ItemGroup>
