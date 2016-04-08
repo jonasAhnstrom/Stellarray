@@ -1,10 +1,7 @@
-#include <QGraphicsScene>
-#include <QPainter>
-#include <QStyleOption>
-
 #define _USE_MATH_DEFINES
 
 #include <math.h>
+#include <QPainter>
 
 #include "Player.h"
 
@@ -52,7 +49,6 @@ Player::~Player()
 void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	painter->drawPixmap(0, 0, pixmap());
-
 }
 
 
@@ -60,10 +56,6 @@ void Player::update(QKeyEvent *event)
 {
 	if (event->type() == QEvent::KeyRelease)
 	{
-		/*if (!event->isAutoRepeat())
-		{
-		_velocity = 0;
-		}*/
 		switch (event->key())
 		{
 		case Qt::Key::Key_W:
@@ -78,12 +70,11 @@ void Player::update(QKeyEvent *event)
 		case Qt::Key::Key_D:
 			_keysDown.key_D = false;
 			break;
+		case Qt::Key::Key_Space:
+			_keysDown.key_Space = false;
+			break;
 		default:
 			break;
-		}
-		if (_keysDown.key_W == false && _keysDown.key_A == false && _keysDown.key_S == false && _keysDown.key_D == false)
-		{
-			_keysDown.noKey = true;
 		}
 	}
 	else
@@ -102,10 +93,15 @@ void Player::update(QKeyEvent *event)
 		case Qt::Key::Key_D:
 			_keysDown.key_D = true;
 			break;
+		case Qt::Key::Key_Space:
+			_keysDown.key_Space = true;
+			break;
+		case Qt::Key::Key_R:
+			setPos(2000, 1500);
+			break;
 		default:
 			break;
 		}
-		_keysDown.noKey = false;
 	}
 }
 
@@ -132,10 +128,10 @@ void Player::updateVelocity()
 	qreal eX = cosTheta >= 0 ? 1 : -1;
 	qreal eY = sinTheta >= 0 ? 1 : -1;
 
-	if (_velocity < 5 && _keysDown.key_W && !_keysDown.key_S) // Check if max speed
+	if (_velocity < 4.5 && _keysDown.key_W && !_keysDown.key_S) // Check if max speed
 	{
-		_velocityComponent.x += (pow(0.08, 2) + 0.03) * eX * abs(cosTheta);
-		_velocityComponent.y += (pow(0.08, 2) + 0.03) * eY * abs(sinTheta);
+		_velocityComponent.x += (pow(0.06, 2) + 0.03) * eX * abs(cosTheta);
+		_velocityComponent.y += (pow(0.06, 2) + 0.03) * eY * abs(sinTheta);
 		/*qDebug() << "x = ";
 		qDebug() << _velocityComponent.x;
 		qDebug() << "y = ";
@@ -182,7 +178,66 @@ void Player::updateRotation()
 	setRotation(rotation() + _rotationSpeed);
 }
 
-// TODO: Velocity vector that knows x and y speed
+
+void Player::updateBullet()
+{
+	if (_keysDown.key_Space)
+	{
+		qreal currentRotation = Player::rotation()/* < 90 ? rotation() - 90 : rotation()*/; // If first quadrant, special case -90
+		qreal theta = (abs(fmod(currentRotation, 360)) / -1 + 90) * M_PI / 180; // Max 360 degrees rotation, absolute value, anti clockwise (-1), +90 to start from horizontal x-axle, degrees to radians
+
+		qreal cosTheta;
+		qreal sinTheta;
+		//qDebug() << currentRotation;
+ 		if (currentRotation < 0) // To deal with negative values from rotation()
+		{
+			theta /= -1;
+			cosTheta = cos(theta) / -1;
+			sinTheta = sin(theta) / -1;
+		}
+		else
+		{
+			cosTheta = cos(theta);
+			sinTheta = sin(theta);
+		}
+		qreal eX = cosTheta >= 0 ? 1 : -1;
+		qreal eY = sinTheta >= 0 ? 1 : -1;
+
+		QPoint bulletPos = QPoint(x() + (boundingRect().width() / 2) + (boundingRect().width() / 1.5) * cosTheta, (y() - 8 + (boundingRect().height() / 2) + (boundingRect().height() / 1.5) * (sinTheta /-1)));
+
+		//qDebug() << theta;
+
+		qreal angle;
+		if (currentRotation >= 0)
+		{
+			angle = ((((theta * 180.0 / M_PI) + 90) / -1) +180);
+		}
+		else
+		{
+			angle = (((theta * 180.0 / M_PI) + 90) / -1);
+		}
+
+		//qDebug() << angle;
+		//setTransformOriginPoint(boundingRect().width() / 2, boundingRect().height() / 2);
+		//setRotation((((angle * 180.0 / M_PI) + 90) / -1));
+		//qDebug() << (angle * 180.0 / M_PI) + 90;
+
+		emit bullet(bulletPos, angle);
+		//qDebug() << "bbb";
+		/*_bullets.append(Bullet());
+		scene()->addItem(&_bullets.last());*/
+
+		//_bulletTimer.restart();
+	}
+}
+
+
+qreal Player::getVelocity()
+{
+	return _velocity;
+}
+
+
 void Player::advance(int step)
 {
 	if (!step)
@@ -191,4 +246,15 @@ void Player::advance(int step)
 	}
 	updateVelocity();
 	updateRotation();
+	updateBullet();
 }
+
+//void Player::newBullet()
+//{
+//	/*qDebug() << "bbb";*/
+//}
+
+//void Player::bullet()
+//{
+//
+//}

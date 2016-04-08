@@ -2,11 +2,16 @@
 
 #include <QGraphicsPixmapItem>
 #include <QKeyEvent>
-#include <vector>
+#include <QObject>
+//#include <QElapsedTimer>
+
+//#include "Bullet.h"
 
 
-class Player : public QGraphicsPixmapItem
+class Player : public QObject, public QGraphicsPixmapItem
 {
+	Q_OBJECT
+
 public:
 	Player(QGraphicsItem *parent = 0);
 	Player(const QPixmap &pixmap, QGraphicsItem *parent = 0);
@@ -18,6 +23,11 @@ public:
 	void update(QKeyEvent *event);
 	void updateVelocity();
 	void updateRotation();
+	void updateBullet();
+	qreal getVelocity();
+
+signals:
+	void bullet(QPoint bulletPos, qreal angle);
 
 protected:
 	void advance(int step) Q_DECL_OVERRIDE;
@@ -29,19 +39,20 @@ protected:
 		bool key_S = 0;
 		bool key_D = 0;
 		bool key_Space = 0;
-		bool noKey = 0;
 	};
 	KeysDown _keysDown;
-	
-private:
-	//QPixmap _playerPixmap;
 
+private:
 	struct VelocityComponent
 	{
-		double x;
-		double y;
+		qreal x;
+		qreal y;
 	};
 	VelocityComponent _velocityComponent;
 	qreal _velocity;
 	qreal _rotationSpeed;
+
+	//QElapsedTimer _bulletTimer;
+
+	//QList<Bullet> _bullets;
 };

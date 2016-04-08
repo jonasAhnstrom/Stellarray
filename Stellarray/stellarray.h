@@ -1,8 +1,8 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
-#include "ui_stellarray.h"
 
+#include "ui_stellarray.h"
 #include "Game.h"
 
 
@@ -13,6 +13,7 @@ class Stellarray : public QMainWindow
 public:
 	Stellarray(QWidget *parent = 0);
 	~Stellarray();
+
 	void keyPressEvent(QKeyEvent *event);
 	void keyReleaseEvent(QKeyEvent *event);
 

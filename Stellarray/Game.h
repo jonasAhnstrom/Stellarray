@@ -6,16 +6,16 @@
 
 #include "Course.h"
 #include "Player.h"
+#include "Bullet.h"
 
+#include <vector>
 
 class Game : public QGraphicsView
 {
 	Q_OBJECT
 
-	friend class Stellarray;
-
 public:
-	Game();
+	Game(QWidget *parent = 0);
 	~Game();
 
 	void keyPress(QKeyEvent *event);
@@ -23,15 +23,19 @@ public:
 
 private:
 	QGraphicsScene _gameScene;
-	QGraphicsView _gameView;
+	//QGraphicsView _gameView;
 	Course _gameCourse;
 	Player _player;
-/*
+	std::vector<Bullet*> _bullets;
+	QElapsedTimer _bulletTimer;
 
-	enum Key{
+/*	enum Key{
 		bool Key_W = 0;
 	};*/
 
+	friend class Stellarray;
+
 private slots:
 	void update();
+	void newBullet(QPoint bulletPos, qreal angle);
 };
