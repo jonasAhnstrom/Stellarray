@@ -115,4 +115,15 @@
   <ItemGroup>
     <ResourceCompile Include="Stellarray.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\bg.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\bullet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\player.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>
