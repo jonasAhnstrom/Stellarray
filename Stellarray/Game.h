@@ -7,6 +7,7 @@
 #include "Course.h"
 #include "Player.h"
 #include "Bullet.h"
+#include "Enemy.h"
 
 #include <vector>
 
@@ -18,24 +19,25 @@ public:
 	Game(QWidget *parent = 0);
 	~Game();
 
-	void keyPress(QKeyEvent *event);
-	void keyRelease(QKeyEvent *event);
+	void keyPressEvent(QKeyEvent *event);
+	void keyReleaseEvent(QKeyEvent *event);
 
 private:
 	QGraphicsScene _gameScene;
 	//QGraphicsView _gameView;
 	Course _gameCourse;
+	QTimer gameTimer;
 	Player _player;
-	std::vector<Bullet*> _bullets;
+	QList<Bullet*> _bullets;
 	QElapsedTimer _bulletTimer;
-
-/*	enum Key{
-		bool Key_W = 0;
-	};*/
+	QList<Enemy*> _enemys;
+	//int _enemys;
 
 	friend class Stellarray;
 
 private slots:
 	void update();
 	void newBullet(QPoint bulletPos, qreal angle);
+	void deleteBullet();
+	void deleteEnemy(int enemyId);
 };

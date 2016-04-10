@@ -80,6 +80,18 @@
     <ClCompile Include="GeneratedFiles\Release\moc_Player.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_Enemy.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Enemy.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="pixmapitem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="stellarray.h">
@@ -100,6 +112,9 @@
     <CustomBuild Include="Bullet.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="Enemy.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_stellarray.h">
@@ -109,6 +124,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pixmapitem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -129,6 +147,33 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Resources\bg3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\5.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\6.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\7.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\8.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\enemy1.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

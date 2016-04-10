@@ -3,9 +3,6 @@
 #include <QGraphicsPixmapItem>
 #include <QKeyEvent>
 #include <QObject>
-//#include <QElapsedTimer>
-
-//#include "Bullet.h"
 
 
 class Player : public QObject, public QGraphicsPixmapItem
@@ -20,11 +17,16 @@ public:
 	//QRectF boundingRect() const Q_DECL_OVERRIDE;
 	//QPainterPath shape() const Q_DECL_OVERRIDE;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;
-	void update(QKeyEvent *event);
+	virtual int type() const Q_DECL_OVERRIDE;
+	void updateInput(QKeyEvent *event);
 	void updateVelocity();
 	void updateRotation();
 	void updateBullet();
 	qreal getVelocity();
+	qreal getVelocityX();
+	qreal getVelocityY();
+
+	enum { Type = UserType + 1 };
 
 signals:
 	void bullet(QPoint bulletPos, qreal angle);
@@ -45,14 +47,10 @@ protected:
 private:
 	struct VelocityComponent
 	{
-		qreal x;
-		qreal y;
+			qreal x;
+			qreal y;
 	};
 	VelocityComponent _velocityComponent;
 	qreal _velocity;
 	qreal _rotationSpeed;
-
-	//QElapsedTimer _bulletTimer;
-
-	//QList<Bullet> _bullets;
 };

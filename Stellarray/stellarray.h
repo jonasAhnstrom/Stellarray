@@ -14,8 +14,8 @@ public:
 	Stellarray(QWidget *parent = 0);
 	~Stellarray();
 
-	void keyPressEvent(QKeyEvent *event);
-	void keyReleaseEvent(QKeyEvent *event);
+	//void keyPressEvent(QKeyEvent *event);
+	//void keyReleaseEvent(QKeyEvent *event);
 
 private:
 	Ui::StellarrayClass _ui;

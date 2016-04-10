@@ -15,16 +15,16 @@ Stellarray::~Stellarray()
 }
 
 
-void Stellarray::keyPressEvent(QKeyEvent *event)
-{
-	_game.keyPress(event);
-}
-
-
-void Stellarray::keyReleaseEvent(QKeyEvent *event)
-{
-	_game.keyRelease(event);
-}
+//void Stellarray::keyPressEvent(QKeyEvent *event)
+//{
+//	//_game.keyPress(event);
+//}
+//
+//
+//void Stellarray::keyReleaseEvent(QKeyEvent *event)
+//{
+//	//_game.keyRelease(event);
+//}
 
 
 void Stellarray::startNewGame()
@@ -32,7 +32,6 @@ void Stellarray::startNewGame()
 	_game.setParent(this);
 	_game.setFocus();
 	_game.show();
-
 	setFixedSize(_game.size());
 }
 

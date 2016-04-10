@@ -9,12 +9,13 @@
 #include <qdebug.h>
 
 
-Player::Player(QGraphicsItem *parent) : _velocity(0), _rotationSpeed(0), _velocityComponent()/*, _playerPixmap("Resources/player.png")*/
+Player::Player(QGraphicsItem *parent) : _velocity(0), _rotationSpeed(0), _velocityComponent(), QGraphicsPixmapItem(QPixmap("Resources/player.png").scaled(60, 100, Qt::KeepAspectRatio))
 {
-	QPixmap pix = QPixmap("Resources/player.png");
-	pix.setDevicePixelRatio(5); // TODO: change size in photoshop for better quality scaling
-	setPixmap(pix);
-	//_playerPixmap.setDevicePixelRatio(qreal(5)); // TODO: change size in photoshop for better quality scaling
+	//QPixmap pix = QPixmap("Resources/player.png");
+	//pix.scaled(40, 60, Qt::KeepAspectRatio); // TODO: change size in photoshop for better quality scaling
+	//setPixmap(pix);
+	//pixmap().scaled(40, 60, Qt::KeepAspectRatio);
+
 	setPos(2000, 1500);
 	setTransformOriginPoint(boundingRect().width() / 2, boundingRect().height() / 2);
 }
@@ -52,7 +53,13 @@ void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 }
 
 
-void Player::update(QKeyEvent *event)
+int Player::type() const
+{
+	return Type;
+}
+
+
+void Player::updateInput(QKeyEvent *event)
 {
 	if (event->type() == QEvent::KeyRelease)
 	{
@@ -130,8 +137,8 @@ void Player::updateVelocity()
 
 	if (_velocity < 4.5 && _keysDown.key_W && !_keysDown.key_S) // Check if max speed
 	{
-		_velocityComponent.x += (pow(0.06, 2) + 0.03) * eX * abs(cosTheta);
-		_velocityComponent.y += (pow(0.06, 2) + 0.03) * eY * abs(sinTheta);
+		_velocityComponent.x += (pow(0.03, 2) + 0.02) * eX * abs(cosTheta);
+		_velocityComponent.y += (pow(0.03, 2) + 0.02) * eY * abs(sinTheta);
 		/*qDebug() << "x = ";
 		qDebug() << _velocityComponent.x;
 		qDebug() << "y = ";
@@ -139,8 +146,8 @@ void Player::updateVelocity()
 	}
 	else if (_velocity < 3 && _keysDown.key_S && !_keysDown.key_W)
 	{
-		_velocityComponent.x -= (pow(0.04, 2) + 0.01) * eX * abs(cosTheta);;
-		_velocityComponent.y -= (pow(0.04, 2) + 0.01) * eY * abs(sinTheta);
+		_velocityComponent.x -= (pow(0.01, 2) + 0.01) * eX * abs(cosTheta);;
+		_velocityComponent.y -= (pow(0.01, 2) + 0.01) * eY * abs(sinTheta);
 	}
 	else
 	{
@@ -163,13 +170,13 @@ void Player::updateVelocity()
 
 void Player::updateRotation()
 {
-	if (_keysDown.key_A && !_keysDown.key_D)
+	if (_rotationSpeed > -6 && _keysDown.key_A && !_keysDown.key_D)
 	{
-		_rotationSpeed -= pow(0.13, 2);
+		_rotationSpeed -= pow(0.12, 2);
 	}
-	else if (_keysDown.key_D && !_keysDown.key_A)
+	else if (_rotationSpeed < 6 && _keysDown.key_D && !_keysDown.key_A)
 	{
-		_rotationSpeed += pow(0.13, 2);
+		_rotationSpeed += pow(0.12, 2);
 	}
 	else
 	{
@@ -189,7 +196,7 @@ void Player::updateBullet()
 		qreal cosTheta;
 		qreal sinTheta;
 		//qDebug() << currentRotation;
- 		if (currentRotation < 0) // To deal with negative values from rotation()
+		if (currentRotation < 0) // To deal with negative values from rotation()
 		{
 			theta /= -1;
 			cosTheta = cos(theta) / -1;
@@ -203,14 +210,14 @@ void Player::updateBullet()
 		qreal eX = cosTheta >= 0 ? 1 : -1;
 		qreal eY = sinTheta >= 0 ? 1 : -1;
 
-		QPoint bulletPos = QPoint(x() + (boundingRect().width() / 2) + (boundingRect().width() / 1.5) * cosTheta, (y() - 8 + (boundingRect().height() / 2) + (boundingRect().height() / 1.5) * (sinTheta /-1)));
+		QPoint bulletPos = QPoint(x() + (boundingRect().width() / 2) + (boundingRect().width() / 1.5) * cosTheta, (y() - 8 + (boundingRect().height() / 2) + (boundingRect().height() / 1.5) * (sinTheta / -1)));
 
 		//qDebug() << theta;
 
 		qreal angle;
 		if (currentRotation >= 0)
 		{
-			angle = ((((theta * 180.0 / M_PI) + 90) / -1) +180);
+			angle = ((((theta * 180.0 / M_PI) + 90) / -1) + 180);
 		}
 		else
 		{
@@ -218,16 +225,8 @@ void Player::updateBullet()
 		}
 
 		//qDebug() << angle;
-		//setTransformOriginPoint(boundingRect().width() / 2, boundingRect().height() / 2);
-		//setRotation((((angle * 180.0 / M_PI) + 90) / -1));
-		//qDebug() << (angle * 180.0 / M_PI) + 90;
 
 		emit bullet(bulletPos, angle);
-		//qDebug() << "bbb";
-		/*_bullets.append(Bullet());
-		scene()->addItem(&_bullets.last());*/
-
-		//_bulletTimer.restart();
 	}
 }
 
@@ -235,6 +234,18 @@ void Player::updateBullet()
 qreal Player::getVelocity()
 {
 	return _velocity;
+}
+
+
+qreal Player::getVelocityX()
+{
+	return _velocityComponent.x;
+}
+
+
+qreal Player::getVelocityY()
+{
+	return _velocityComponent.y;
 }
 
 
@@ -248,13 +259,3 @@ void Player::advance(int step)
 	updateRotation();
 	updateBullet();
 }
-
-//void Player::newBullet()
-//{
-//	/*qDebug() << "bbb";*/
-//}
-
-//void Player::bullet()
-//{
-//
-//}
